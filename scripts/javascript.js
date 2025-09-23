@@ -53,7 +53,7 @@ function playGame(rounds = 5)
     let humanScore = 0, computerScore = 0;
     let humanChoice, computerChoice;
 
-    let playRound = function (humanChoice, computerChoice)
+    const playRound = function (humanChoice, computerChoice)
     {
         let playerIsWinner;
 
@@ -109,4 +109,4 @@ function playGame(rounds = 5)
     
 }
 
-console.log(playGame());
+playGame();
