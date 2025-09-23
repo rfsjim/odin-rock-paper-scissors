@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rock Paper Scissors game
- * @author James  <5404425+rfsjim@users.noreply.github.com>
- * @version 0.0.1
+ * @author James
+ * @version 1.0.0
  * @date 23rd September 2025
  * 
  * @description
@@ -34,4 +34,79 @@ function getComputerChoice()
     return choice
 }
 
-console.log(getComputerChoice());
+/**
+ * Gets human player's choice - assumes only rock, paper, or scissors will be inputted
+ * @returns human player's choice as lower case string
+ */
+function getHumanChoice()
+{
+    return prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase()
+}
+
+/**
+ * Play Rock Scissors Paper Game
+ * @param {*} rounds defaults to 5
+ * @returns 
+ */
+function playGame(rounds = 5)
+{
+    let humanScore = 0, computerScore = 0;
+    let humanChoice, computerChoice;
+
+    let playRound = function (humanChoice, computerChoice)
+    {
+        let playerIsWinner;
+
+        if (humanChoice === computerChoice)
+        {
+            console.log(`Tie! You threw ${humanChoice} and I threw ${computerChoice}`);
+            return
+        }
+        else if (humanChoice === 'rock')
+        {
+            playerIsWinner = (computerChoice === 'scissors');     
+        }
+        else if (humanChoice === 'paper')
+        {
+            playerIsWinner = (computerChoice === 'rock')
+        }
+        else if (humanChoice === 'scissors')
+        {
+            playerIsWinner = (computerChoice === 'paper');
+        }
+
+        if (playerIsWinner)
+        {
+            console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+            humanScore++;
+        }
+        else
+        {
+            console.log(`You Lose! ${computerChoice} beats ${humanChoice}`);
+            computerScore++;
+        }
+
+        return
+    };
+
+    for (let i = 0; i < rounds; i++) {
+        humanChoice = getHumanChoice();
+        computerChoice = getComputerChoice();
+
+        playRound(humanChoice, computerChoice);
+    }
+
+    if (humanScore === computerScore)
+    {
+        console.log(`Tie! ${humanScore} to ${computerScore}`);
+        return
+    }
+
+    const winner = (humanScore > computerScore) ? "You" : "Computer";
+
+    console.log(`${winner} won.`);
+    console.log(`Your score - ${humanScore}, Computer score - ${computerScore}`);
+    
+}
+
+console.log(playGame());
