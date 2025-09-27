@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rock Paper Scissors game
  * @author James
- * @version 1.0.0
+ * @version 1.0.1
  * @date 23rd September 2025
  * 
  * @description
