@@ -1,11 +1,12 @@
 /**
  * @fileoverview Rock Paper Scissors game
  * @author James
- * @version 1.0.1
+ * @version 1.1.0
  * @date 23rd September 2025
+ * @updated 15th October 2025
  * 
  * @description
- * Console based rock paper scissors game
+ * Rock paper scissors game
  * For the Odin Project
  */
 
@@ -45,13 +46,14 @@ function getHumanChoice()
 
 /**
  * Play Rock Scissors Paper Game
- * @param {*} rounds defaults to 5
+ * @param {*} humanChoice rock paper or scissors
+ * @param {*} rounds defaults to 1
  * @returns 
  */
-function playGame(rounds = 5)
+function playGame(humanChoice, rounds = 1)
 {
     let humanScore = 0, computerScore = 0;
-    let humanChoice, computerChoice;
+    let computerChoice;
 
     const playRound = function (humanChoice, computerChoice)
     {
@@ -90,7 +92,7 @@ function playGame(rounds = 5)
     };
 
     for (let i = 0; i < rounds; i++) {
-        humanChoice = getHumanChoice();
+        if (humanChoice === '') humanChoice = getHumanChoice();
         computerChoice = getComputerChoice();
 
         playRound(humanChoice, computerChoice);
@@ -106,7 +108,12 @@ function playGame(rounds = 5)
 
     console.log(`${winner} won.`);
     console.log(`Your score - ${humanScore}, Computer score - ${computerScore}`);
-    
 }
 
-playGame();
+const buttons = document.querySelectorAll("#btnContainer > button");
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        playGame(button.id);
+    });
+});
