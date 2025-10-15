@@ -50,7 +50,7 @@ function getHumanChoice()
  * @param {*} rounds defaults to 1
  * @returns 
  */
-function playGame(humanChoice, rounds = 1)
+function playGame(humanChoice, rounds = 5)
 {
     let humanScore = 0, computerScore = 0;
     let computerChoice;
@@ -61,7 +61,7 @@ function playGame(humanChoice, rounds = 1)
 
         if (humanChoice === computerChoice)
         {
-            console.log(`Tie! You threw ${humanChoice} and I threw ${computerChoice}`);
+            roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}`;
             return
         }
         else if (humanChoice === 'rock')
@@ -79,12 +79,12 @@ function playGame(humanChoice, rounds = 1)
 
         if (playerIsWinner)
         {
-            console.log(`You win! ${humanChoice} beats ${computerChoice}`);
+            roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
             humanScore++;
         }
         else
         {
-            console.log(`You Lose! ${computerChoice} beats ${humanChoice}`);
+            roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}`;
             computerScore++;
         }
 
@@ -96,21 +96,30 @@ function playGame(humanChoice, rounds = 1)
         computerChoice = getComputerChoice();
 
         playRound(humanChoice, computerChoice);
+        currentScore.textContent = `Your Score: ${humanScore}, My Score: ${computerScore}`;
     }
 
     if (humanScore === computerScore)
     {
-        console.log(`Tie! ${humanScore} to ${computerScore}`);
+        gameResult.textContent = `Tie! ${humanScore} to ${computerScore}`;
         return
     }
 
     const winner = (humanScore > computerScore) ? "You" : "Computer";
 
-    console.log(`${winner} won.`);
-    console.log(`Your score - ${humanScore}, Computer score - ${computerScore}`);
+    gameResult.textContent = `${winner} won.<br>`;
+    gameResult.textContent += `Your score - ${humanScore}, Computer score - ${computerScore}`;
 }
 
 const buttons = document.querySelectorAll("#btnContainer > button");
+const results = document.querySelector("#resultsContainer");
+const roundResult = document.createElement("span");
+const currentScore = document.createElement("span");
+const gameResult = document.createElement("span");
+
+results.appendChild(roundResult);
+results.appendChild(currentScore);
+results.appendChild(gameResult);
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
