@@ -3,7 +3,7 @@
  * @author James
  * @version 1.1.0
  * @date 23rd September 2025
- * @updated 15th October 2025
+ * @updated 16th October 2025
  * 
  * @description
  * Rock paper scissors game
@@ -32,7 +32,7 @@ function getComputerChoice()
             break;
     }
 
-    return choice
+    return choice;
 }
 
 /**
@@ -41,8 +41,48 @@ function getComputerChoice()
  */
 function getHumanChoice()
 {
-    return prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase()
+    return prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase();
 }
+
+/**
+ * Plays a single round of Rock Paper Scissors (RPS or じゃんけん)
+ * @param {*} humanChoice rock paper scissors selected from command boxes  
+ * @param {*} computerChoice random choice from getComputerChoice
+ * @returns playerIsWinner boolean
+ */
+function playRound(humanChoice, computerChoice)
+{
+    let playerIsWinner = false;
+
+    if (humanChoice === computerChoice)
+    {
+        roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}\n`;
+        return playerIsWinner;
+    }
+    else if (humanChoice === 'rock')
+    {
+        playerIsWinner = (computerChoice === 'scissors');     
+    }
+    else if (humanChoice === 'paper')
+    {
+        playerIsWinner = (computerChoice === 'rock');
+    }
+    else if (humanChoice === 'scissors')
+    {
+        playerIsWinner = (computerChoice === 'paper');
+    }
+
+    if (playerIsWinner)
+    {
+        roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}\n`;
+    }
+    else
+    {
+        roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}\n`;
+    }
+
+    return playerIsWinner;
+};
 
 /**
  * Play Rock Scissors Paper Game
@@ -50,65 +90,25 @@ function getHumanChoice()
  * @param {*} rounds defaults to 1
  * @returns 
  */
-function playGame(humanChoice, rounds = 5)
+function playGame(rounds = 5)
 {
     let humanScore = 0, computerScore = 0;
-    let computerChoice;
 
-    const playRound = function (humanChoice, computerChoice)
+    for (let i = 0; i < rounds; i++)
     {
-        let playerIsWinner;
-
-        if (humanChoice === computerChoice)
-        {
-            roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}`;
-            return
-        }
-        else if (humanChoice === 'rock')
-        {
-            playerIsWinner = (computerChoice === 'scissors');     
-        }
-        else if (humanChoice === 'paper')
-        {
-            playerIsWinner = (computerChoice === 'rock')
-        }
-        else if (humanChoice === 'scissors')
-        {
-            playerIsWinner = (computerChoice === 'paper');
-        }
-
-        if (playerIsWinner)
-        {
-            roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}`;
-            humanScore++;
-        }
-        else
-        {
-            roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}`;
-            computerScore++;
-        }
-
-        return
-    };
-
-    for (let i = 0; i < rounds; i++) {
-        if (humanChoice === '') humanChoice = getHumanChoice();
-        computerChoice = getComputerChoice();
-
-        playRound(humanChoice, computerChoice);
-        currentScore.textContent = `Your Score: ${humanScore}, My Score: ${computerScore}`;
+        currentScore.textContent = `Your Score: ${humanScore}, My Score: ${computerScore}\n`;
     }
 
     if (humanScore === computerScore)
     {
-        gameResult.textContent = `Tie! ${humanScore} to ${computerScore}`;
-        return
+        gameResult.textContent = `Tie! ${humanScore} to ${computerScore}\n`;
+        return;
     }
 
     const winner = (humanScore > computerScore) ? "You" : "Computer";
 
-    gameResult.textContent = `${winner} won.<br>`;
-    gameResult.textContent += `Your score - ${humanScore}, Computer score - ${computerScore}`;
+    gameResult.textContent = `${winner} won.\n`;
+    gameResult.textContent += `Your score - ${humanScore}, Computer score - ${computerScore}\n`;
 }
 
 const buttons = document.querySelectorAll("#btnContainer > button");
@@ -123,6 +123,6 @@ results.appendChild(gameResult);
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
-        playGame(button.id);
+        playRound(button.id, getComputerChoice());
     });
 });
