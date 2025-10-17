@@ -3,7 +3,7 @@
  * @author James
  * @version 1.1.0
  * @date 23rd September 2025
- * @updated 16th October 2025
+ * @updated 17th October 2025
  * 
  * @description
  * Rock paper scissors game
@@ -12,7 +12,7 @@
 
 /**
  * Randomly returns computer choice for rock paper scissors
- * @returns random choice one of the following string values: “rock”, “paper” or “scissors”
+ * @returns {string} random choice one of the following string values: “rock”, “paper” or “scissors”
  */
 function getComputerChoice()
 {
@@ -37,7 +37,7 @@ function getComputerChoice()
 
 /**
  * Gets human player's choice - assumes only rock, paper, or scissors will be inputted
- * @returns human player's choice as lower case string
+ * @returns {string} human player's choice as lower case string
  */
 function getHumanChoice()
 {
@@ -46,18 +46,16 @@ function getHumanChoice()
 
 /**
  * Plays a single round of Rock Paper Scissors (RPS or じゃんけん)
- * @param {*} humanChoice rock paper scissors selected from command boxes  
- * @param {*} computerChoice random choice from getComputerChoice
- * @returns playerIsWinner boolean
+ * @param {string} humanChoice rock paper scissors selected from command boxes  
+ * @param {string} computerChoice random choice from getComputerChoice
+ * @returns {string} humanResult either 'tie' 'win' or 'lose'
  */
 function playRound(humanChoice, computerChoice)
 {
-    let playerIsWinner = false;
-
     if (humanChoice === computerChoice)
     {
         roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}\n`;
-        return playerIsWinner;
+        return 'tie';
     }
     else if (humanChoice === 'rock')
     {
@@ -75,41 +73,51 @@ function playRound(humanChoice, computerChoice)
     if (playerIsWinner)
     {
         roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}\n`;
+        return 'win';
     }
     else
     {
         roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}\n`;
+        return 'lose';
     }
-
-    return playerIsWinner;
 };
 
 /**
  * Play Rock Scissors Paper Game
- * @param {*} humanChoice rock paper or scissors
- * @param {*} rounds defaults to 1
+ * @param {string} humanChoice
+ * @param {string} computerChoice 
+ * @param {number} [winningScore=5]
  * @returns 
  */
-function playGame(rounds = 5)
+function playGame(humanChoice, computerChoice, winningScore = 5)
 {
-    let humanScore = 0, computerScore = 0;
+    let playerResult = playRound(humanChoice, computerChoice);
 
-    for (let i = 0; i < rounds; i++)
+    if (playerResult === 'win')
     {
-        currentScore.textContent = `Your Score: ${humanScore}, My Score: ${computerScore}\n`;
+        humanScore++;
     }
-
-    if (humanScore === computerScore)
+    else if (playerResult === 'lose')
     {
-        gameResult.textContent = `Tie! ${humanScore} to ${computerScore}\n`;
-        return;
+        computerScore++;
     }
+    
+    currentScore.textContent = `Your Score: ${humanScore}, My Score: ${computerScore}\n`;
 
-    const winner = (humanScore > computerScore) ? "You" : "Computer";
+    if (humanScore === winningScore || computerScore === winningScore)
+    {
+        const winner = (humanScore > computerScore) ? "You" : "Computer";
+        
+        gameResult.textContent = `${winner} won.\n`;
+        gameResult.textContent += `Your score - ${humanScore}, Computer score - ${computerScore}\n`;
 
-    gameResult.textContent = `${winner} won.\n`;
-    gameResult.textContent += `Your score - ${humanScore}, Computer score - ${computerScore}\n`;
+        buttons.forEach((button) => {
+            button.disabled = true;
+        });
+    }
 }
+
+let humanScore = 0, computerScore = 0;
 
 const buttons = document.querySelectorAll("#btnContainer > button");
 const results = document.querySelector("#resultsContainer");
@@ -123,6 +131,6 @@ results.appendChild(gameResult);
 
 buttons.forEach((button) => {
     button.addEventListener("click", () => {
-        playRound(button.id, getComputerChoice());
+        playGame(button.id, getComputerChoice());
     });
 });
