@@ -16,23 +16,9 @@
  */
 function getComputerChoice()
 {
-    const randomNumber = Math.ceil(Math.random() * 100);
-    let choice;
-
-    switch(true)
-    {
-        case randomNumber <= 33:
-            choice = "rock";
-            break;
-        case randomNumber <= 66:
-            choice = "paper";
-            break;
-        case randomNumber <= 100:
-            choice = "scissors";
-            break;
-    }
-
-    return choice;
+    const choices = ['rock', 'paper', 'scissors'];
+    
+    return choices[Math.floor(Math.random() * choices.length)];
 }
 
 /**
@@ -41,7 +27,16 @@ function getComputerChoice()
  */
 function getHumanChoice()
 {
-    return prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase();
+    const validChoices = ['rock', 'paper', 'scissors'];
+
+    let choice = prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase();
+
+    while (!validChoices.includes(choice))
+    {
+        choice = prompt("Throw Rock, Paper, or Scissors?: ").toLowerCase();
+    }
+
+    return choice;
 }
 
 /**
@@ -52,9 +47,10 @@ function getHumanChoice()
  */
 function playRound(humanChoice, computerChoice)
 {
+    let playerIsWinner;
+    
     if (humanChoice === computerChoice)
     {
-        roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}\n`;
         return 'tie';
     }
     else if (humanChoice === 'rock')
@@ -72,12 +68,10 @@ function playRound(humanChoice, computerChoice)
 
     if (playerIsWinner)
     {
-        roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}\n`;
         return 'win';
     }
     else
     {
-        roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}\n`;
         return 'lose';
     }
 };
@@ -91,14 +85,20 @@ function playRound(humanChoice, computerChoice)
  */
 function playGame(humanChoice, computerChoice, winningScore = 5)
 {
-    let playerResult = playRound(humanChoice, computerChoice);
+    const playerResult = playRound(humanChoice, computerChoice);
 
-    if (playerResult === 'win')
+    if (playerResult === 'tie')
     {
+        roundResult.textContent = `Tie! You threw ${humanChoice} and I threw ${computerChoice}\n`;
+    }
+    else if (playerResult === 'win')
+    {
+        roundResult.textContent = `You win! ${humanChoice} beats ${computerChoice}\n`;
         humanScore++;
     }
     else if (playerResult === 'lose')
     {
+        roundResult.textContent = `You Lose! ${computerChoice} beats ${humanChoice}\n`;
         computerScore++;
     }
     
